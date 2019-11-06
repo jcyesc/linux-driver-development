@@ -5,6 +5,27 @@ This repository contains the Raspbian distro and example drivers. The examples
 are taken from the book "Linux Driver Development for Embedded Processors" by
 Alberto Liberal de los Rios.
 
+## Format the SD card and flash and image
+
+The first step to start the linux kernel and driver development in the Raspberry PI
+is to format the SD Card. To do that use the app `SD Card Formatter`.
+
+For more details check:
+
+https://www.raspberrypi.org/documentation/installation/sdxc_formatting.md
+
+After the SD Card is formatted, we need to install an image. Download the Raspbian
+image from:
+
+https://www.raspberrypi.org/downloads/raspbian/
+
+Then, download `balenaEtcher` to flash the image into the SD card.
+
+For more details check:
+
+https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+
+
 ## Links to download, install and build the kernel
 
 https://www.raspberrypi.org/documentation/linux/kernel/
@@ -32,7 +53,7 @@ git push -u origin master
 For all the configuration commands see https://www.raspberrypi.org/documentation/linux/kernel/building.md
 
 ```shell
-cd linux
+cd linux-kernel
 KERNEL=kernel7
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage -j 4 modules dtbs
