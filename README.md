@@ -37,8 +37,8 @@ https://www.raspberrypi.org/documentation/linux/kernel/building.md
 ```shell
 make clean
 make mrproper
-git status | grep arch/arm/ | xargs rm -f
 ```
+
 ## Commands to commit changes using git
 
 ```shell
