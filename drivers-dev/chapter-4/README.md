@@ -22,3 +22,100 @@ Linux supports three type of devices:
 1. Character devices
 2. Block devices
 3. Network devices
+
+## Major and Minor numbers
+
+In Linux, every device is identified by two numbers, a `major` number and a `minor` number. These
+numbers can be seen by invoking `ls -l /dev`. Every device driver registers its major number with
+the kernel and is completely responsible for managing its minor numbers. When accessing a device file,
+the major number selects which device driver is being called to perform the input/output operation.
+The major number is used by the kernel to identify the correct device driver when the device is accessed.
+The role of the minor number is device dependent, and is handled internally within the driver.
+
+For instance, the i.MX7D has several hardware UART ports. The same driver can be used to control all the
+UARTS, but each physical UART needs its own device node, so the device nodes for these UARTs will all have the
+same major number, but will have unique minor numbers.
+
+## How to create devices nodes
+
+There are two ways to create device nodes or virtual files:
+
+1. mknod (not preferred)
+2. devtmpfs and the miscellaneous framework.
+
+
+## LAB 4.1 (uses mknod) - helloworld_char_driver.c
+
+
+
+
+The files used for this lab are:
+
+- chapter-4/helloworld_char_driver.c
+- chapter-4/Makefile
+- chapter-4-apps/app_for_helloworld_char_driver.c
+- chapter-4-apps/Makefile
+
+After compiling the `helloworld_char_driver.c` and the
+app (`chapter-4-apps/app_for_helloworld_char_driver.c`), we need to copy
+this files in the the rootfs of the Raspberry PI (/home/pi) and then execute
+the following commands:
+
+```shell
+sudo insmod helloworld_char_driver.ko
+cat /proc/devices /* see allocation 202 "my_char_device" */
+ls -la /dev  /* my_char_device is not created under /dev yet */
+sudo mknod /dev/my_char_device c 202 0 /* create my_char_device under /dev */
+./app_for_helloworld_char_driver
+dmesg
+rmmod helloworld_char_driver.ko
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
