@@ -19,6 +19,8 @@ clean:
 		ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- \
 		SUBDIRS=$(PWD) clean
 
+# This option is used when you have connected the Raspberry Pi to
+# the host using an ethernet connection. SCP stands for secure copy.
 deploy:
 	scp *.ko root@10.0.0.10:
 	
