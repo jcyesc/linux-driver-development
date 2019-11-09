@@ -46,8 +46,15 @@ There are two ways to create device nodes or virtual files:
 
 ## LAB 4.1 (uses mknod) - helloworld_char_driver.c
 
+In this kernel module lab, you will interact with user space through an `app_for_helloworld_char_driver` user application. We will use open()
+and ioctl() system calls in the application, and write its corresponding driver's callback
+operations on the kernel side, providing the communication between the user and kernel space.
 
+In this lab, we will create an user application to interact with the driver. Finally, we
+will handle file operations in the driver to service requests from user space.
 
+In the kernel, a character type device is represented by `struct cdev`, a structure used to
+register it in the system.
 
 The files used for this lab are:
 
