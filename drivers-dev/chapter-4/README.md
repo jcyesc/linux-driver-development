@@ -85,6 +85,13 @@ was loaded during run-time.In this lab, we make the driver a part of the kernel 
 and have the driver built into the kernel binary image. This way the driver is already loaded
 when the new kernel is booted.
 
+
+The files used for this lab are:
+
+- linux-kernel/drivers/char/hello_kernel_module.c
+- linux-kernel/drivers/char/Makefile
+- linux-kernel/drivers/char/Kconfig
+
 Note: Once that the Kconfig and Makefile files have been modified, run the following command:
 
 ```shell
