@@ -78,3 +78,55 @@ dmesg
 rmmod helloworld_char_driver.ko
 ```
 
+## LAB 2 - Adding the Module to the Kernel Build
+
+So far we have been building drivers as `loadable kernel module (LKM)`, which
+was loaded during run-time.In this lab, we make the driver a part of the kernel source tree
+and have the driver built into the kernel binary image. This way the driver is already loaded
+when the new kernel is booted.
+
+Note: Once that the Kconfig and Makefile files have been modified, run the following command:
+
+```shell
+menu menuconfig ARCH=arm
+```
+
+Then go to `main menu -> Device Drivers -> Character devices -> Hello kernel module defined in the kernel source tree`. Hit <spacebar> once to see a <*> appear next to the new configuration. The other option is <m>, that means module.
+
+To verify that the module has been selected to be compiled, run the following command to check
+if the hello world module appears:
+
+```shell
+more .config | grep HELLO
+```
+> WARNING: Don't execute `make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig` after
+>         executing `make menuconfig ARCH=arm`, otherwise the .config file will be rewritten.
+
+There are several ways to know if the module was compiled:
+
+1. After executing the following command:
+
+```shell
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage -j 4 modules dtbs
+```
+
+you can see a message like:
+
+   CC      drivers/char/hello_kernel_module.o
+  	...
+
+2. Complied modules are installed into `/lib/modules/version/kernel/`, where each directory
+under `kernel/` corresponds to the mdoule's location in the kernel source tree. The kernel version
+is shown at the end of the output of the command `make modules_install`.
+
+3. You can also run the command `lsmod`.
+
+Note about `tristate` in Kconfig file.
+
+The `tristate` line in Kconfig means that it can be built into the kernel (Y), built as a 
+module (M), or not built at all (N). To remove the option of building as a module use the
+directive `bool` instead of `tristate`. If the option (Y) or <*> was picked, it means that
+it will built into the kernel and it won't be a module, so you can't see it with `lsmod`.
+
+
+

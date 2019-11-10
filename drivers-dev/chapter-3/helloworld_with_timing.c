@@ -44,7 +44,3 @@ MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("Module that keeps track of the seconds that has been up");
 
 
-
-
-
-

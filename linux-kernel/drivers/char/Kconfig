@@ -554,6 +554,13 @@ config ADI
 	  and SSM (Silicon Secured Memory).  Intended consumers of this
 	  driver include crash and makedumpfile.
 
+config HELLO_KERNEL_MODULE_CHAPTER_4
+	tristate "Hello kernel module defined in the kernel source tree"
+	default n
+	help
+	  This is a hello kernel driver that is loaded during boot time,
+	  instead of a loadable kernel module (LKM).
+
 endmenu
 
 config RANDOM_TRUST_CPU
