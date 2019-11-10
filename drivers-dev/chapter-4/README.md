@@ -44,7 +44,7 @@ There are two ways to create device nodes or virtual files:
 2. devtmpfs and the miscellaneous framework.
 
 
-## LAB 4.1 (uses mknod) - helloworld_char_driver.c
+## LAB 1 (uses mknod) - helloworld_char_driver.c
 
 In this kernel module lab, you will interact with user space through an `app_for_helloworld_char_driver` user application. We will use open()
 and ioctl() system calls in the application, and write its corresponding driver's callback
@@ -58,10 +58,10 @@ register it in the system.
 
 The files used for this lab are:
 
-- chapter-4/helloworld_char_driver.c
-- chapter-4/Makefile
-- chapter-4-apps/app_for_helloworld_char_driver.c
-- chapter-4-apps/Makefile
+- chapter-4/lab-1/helloworld_char_driver.c
+- chapter-4/lab-1/Makefile
+- chapter-4-apps/lab-1/app_for_helloworld_char_driver.c
+- chapter-4-apps/lab-1/Makefile
 
 After compiling the `helloworld_char_driver.c` and the
 app (`chapter-4-apps/app_for_helloworld_char_driver.c`), we need to copy
@@ -77,52 +77,4 @@ sudo mknod /dev/my_char_device c 202 0 /* create my_char_device under /dev */
 dmesg
 rmmod helloworld_char_driver.ko
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

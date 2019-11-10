@@ -17,16 +17,19 @@ static struct cdev my_char_dev;
  * Implementation for the File Operations open(), close() and ioctl().
  */
 
+/* Implements the open() callback. */
 static int my_char_dev_open(struct inode *inode, struct file *file) {
 	pr_info("my_char_dev_open() is called.\n");
 	return 0;
 }
 
+/* Implements the close() callback. */
 static int my_char_dev_close(struct inode *indoe, struct file *file) {
 	pr_info("my_char_dev_close() is called.\n");
 	return 0;
 }
 
+/* Implements the ioctl() callback. */
 static long my_char_dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
 	pr_info("my_char_dev_ioctl() is called. cmd = %d, arg = %ld\n", cmd, arg);
 	return 0;
@@ -35,7 +38,6 @@ static long my_char_dev_ioctl(struct file *file, unsigned int cmd, unsigned long
 /*
  * End of the File Operations implementation.
  */
-
 
 /* Declare a file operations structure */
 static const struct file_operations my_char_dev_fops = {
@@ -49,7 +51,7 @@ static int __init hello_init(void) {
 	int ret;
 	/* MKDEV macro is used to get the major and minor number. */
 	dev_t dev = MKDEV(MY_MAJOR_NUM, 0);
-	unsigned num_of_char_devices = 1;
+	unsigned num_of_char_devices = 1; /* Number of consecutive device numbers. */
 
 	pr_info("Hello world char driver init()\n");
 
@@ -84,8 +86,5 @@ module_exit(hello_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("This is driver for a custom character device. It defines several file_operations to interact.");
-
-
-
 
 

@@ -2,7 +2,7 @@
 /*
  * This application uses functionality found in the driver:
  *
- * chapter-4/helloworld_char_driver.c
+ * chapter_4/lab-1/helloworld_char_driver.c
  *
  * This driver provides an implementation of some of the
  * file_operations functions (open, close, ioctl).
@@ -12,6 +12,12 @@
  *
  *		cat /proc/devices
  *		mknod /dev/my_char_device c 202 0
+ *
+ * Note:
+ * 	/dev/my_char_device represents the character device name.
+ * 	c indicates that is a character device.
+ * 	202 represents the major number
+ * 	0 represents the minor number
  */
 
 #include <stdio.h>
