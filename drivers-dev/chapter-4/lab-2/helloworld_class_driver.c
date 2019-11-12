@@ -21,7 +21,7 @@ static dev_t dev;
 static unsigned count_minor = 1;
 
 /*
- * file_operation function implementations.
+ * file_operations function implementations.
  */
 static int my_dev_open(struct inode *inode, struct file *file) {
 	pr_info("my_dev_open() is called.\n");
