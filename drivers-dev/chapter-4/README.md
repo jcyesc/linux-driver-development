@@ -133,7 +133,9 @@ Note about `tristate` in Kconfig file.
 The `tristate` line in Kconfig means that it can be built into the kernel (Y), built as a
 module (M), or not built at all (N). To remove the option of building as a module use the
 directive `bool` instead of `tristate`. If the option (Y) or <*> was picked, it means that
-it will built into the kernel and it won't be a module, so you can't see it with `lsmod`.
+it will built into the kernel and it won't be a module, so you can't see it with `lsmod` or under
+`/lib/modules/version/kernel/drivers`.
+
 
 
 
