@@ -138,7 +138,7 @@ it will built into the kernel and it won't be a module, so you can't see it with
 `/lib/modules/version/kernel/drivers`.
 
 
-## LAB 2 - "class" charater module
+## LAB 2 - "class" charater driver
 
 In this kernel module lab we will create a device node using `devtmpfs` instead of doing it
 manually. In this driver, we will add an entry in the `/sys/class` directory.
@@ -164,8 +164,8 @@ The files used for this lab are:
 - chapter-4-apps/lab-2/app_for_helloworld_class_driver.c
 - chapter-4-apps/lab-2/Makefile (builds the binary for the app)
 
-After `copying` the helloworld_class_driver.ko and app_for_helloworld_class_driver in the Raspberry Pi,
-execute the following commands:
+After `copying` the `helloworld_class_driver.ko` and `app_for_helloworld_class_driver` in the
+Raspberry Pi, execute the following commands:
 
 ```shell
 sudo insmod helloworld_class_driver.ko
@@ -174,8 +174,47 @@ ls /sys/class/my_custom_char_class
 ls /sys/class/my_custom_char_class/my_char_class_dev
 cat /sys/class/my_custom_char_class/my_char_class_dev/dev /* See assigned major and minor numbers */
 ls -l /dev /* verify that my_char_class_dev is created under /dev */
-./app_for_helloworld_char_driver /* We'll get "denied permission */
+./app_for_helloworld_class_driver /* We'll get "denied permission */
 sudo chmod 755 /dev/my_char_class_dev
+./app_for_helloworld_class_driver
 sudo rmmod helloworld_class_driver.ko
+```
+
+## Lab 3 - "Miscellaneous Framework" character driver 
+
+The `Misc Framework` is an interface exported by the Linux Kernel that allows modules
+to register their individual minor numbers.
+
+The device driver implemented as a miscellaneous character uses the major number allocated
+by the Linux kernel for `miscellaneous devices`. This eliminates the need to define an unique
+major number for the driver; this is important, as a confilct between major numbers has become
+increasingly likely, and use of the misc device class is an effective tactic. Each probed device
+is dynamically assigned a minor number, and is listed with a directory entry within the sysfs
+pseudo-filesystem under `/sys/class/misc/`.
+
+`Major number 10` is officially assigned to the misc driver. Modules can register individual
+minor numbers with the misc driver and take care of a small device, needing only a single entry
+point.
+
+The files used for this lab are:
+
+- chapter-4/lab-3/helloworld_misc_char_driver.c
+- chapter-4/lab-3/Makefile (builds the .ko file)
+- chapter-4-apps/lab-3/app_for_helloworld_misc_char_driver.c
+- chapter-4-apps/lab-3/Makefile (builds the binary for the app)
+
+After `copying` the `helloworld_misc_char_driver.ko` and `app_for_helloworld_misc_char_driver` in the
+Raspberry Pi, execute the following commands:
+
+```shell
+sudo insmod helloworld_misc_char_driver.ko
+ls /sys/class/misc /* check that my_misc_dev is created under misc class foleder */
+ls /sys/class/misc/my_misc_dev
+cat /sys/class/misc/my_misc_dev/dev /* See the major and minor numbers */
+ls -l /dev /* verify that my_misc_dev is created under /dev */
+./app_for_helloworld_misc_char_driver /* We'll get "denied permission */
+sudo chmod 755 /dev/my_char_class_dev
+./app_for_helloworld_misc_char_driver
+sudo rmmod helloworld_misc_char_driver.ko
 ```
 
