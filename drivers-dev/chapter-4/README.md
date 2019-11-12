@@ -41,10 +41,11 @@ same major number, but will have unique minor numbers.
 There are two ways to create device nodes or virtual files:
 
 1. mknod (not preferred)
-2. devtmpfs and the miscellaneous framework.
+2. devtmpfs 
+3  Miscellaneous framework.
 
 
-## LAB 1 (uses mknod) - helloworld_char_driver.c
+## LAB 1.a (uses mknod) - helloworld_char_driver.c
 
 In this kernel module lab, you will interact with user space through an `app_for_helloworld_char_driver` user application. We will use open()
 and ioctl() system calls in the application, and write its corresponding driver's callback
@@ -78,7 +79,7 @@ dmesg
 rmmod helloworld_char_driver.ko
 ```
 
-## LAB 2 - Adding the Module to the Kernel Build
+## LAB 1.b - Adding the Module to the Kernel Build
 
 So far we have been building drivers as `loadable kernel module (LKM)`, which
 was loaded during run-time.In this lab, we make the driver a part of the kernel source tree
@@ -137,5 +138,44 @@ it will built into the kernel and it won't be a module, so you can't see it with
 `/lib/modules/version/kernel/drivers`.
 
 
+## LAB 2 - "class" charater module
 
+In this kernel module lab we will create a device node using `devtmpfs` instead of doing it
+manually. In this driver, we will add an entry in the `/sys/class` directory.
+
+Device files are created by the kernel via the `devtmpfs` filesystem. Any driver that wishes to
+register a device node will go through the devtmps (via the core driver) to do it. When a devtmpfs
+instance is mounted on /dev, the device node will initially be created with a fixed name,
+permissions, and owner. All device nodes are owned by root and have the default mode of 0600.
+
+After devtmpfs is loaded, the rules in the following files will be applied to the device nodes:
+
+-/etc/udev/rules.d
+-/lib/udev/rules.d
+-/run/udev/rules.d
+
+The `CONFIG_DEVTMPFS_MOUNT` kernel configuration option makes the kernel mount devimpfs automatically
+at boot time, except when booting on an initramfs.
+
+The files used for this lab are:
+
+- chapter-4/lab-2/helloworld_class_driver.c
+- chapter-4/lab-2/Makefile (builds the .ko file)
+- chapter-4-apps/lab-2/app_for_helloworld_class_driver.c
+- chapter-4-apps/lab-2/Makefile (builds the binary for the app)
+
+After `copying` the helloworld_class_driver.ko and app_for_helloworld_class_driver in the Raspberry Pi,
+execute the following commands:
+
+```shell
+sudo insmod helloworld_class_driver.ko
+ls /sys/class
+ls /sys/class/my_custom_char_class
+ls /sys/class/my_custom_char_class/my_char_class_dev
+cat /sys/class/my_custom_char_class/my_char_class_dev/dev /* See assigned major and minor numbers */
+ls -l /dev /* verify that my_char_class_dev is created under /dev */
+./app_for_helloworld_char_driver /* We'll get "denied permission */
+sudo chmod 755 /dev/my_char_class_dev
+sudo rmmod helloworld_class_driver.ko
+```
 
