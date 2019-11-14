@@ -65,6 +65,8 @@ The files used for this lab are:
 - chapter-5-apps/lab-1/Makefile (builds the binary for the app)
 - linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
 
+>Note: Remember to build the device tree (DT) and install the modules.
+
 After `copying` the `keys_platform_device_driver.ko` and `app_for_keys_platform_device_driver` in the
 Raspberry Pi, execute the following commands:
 
@@ -82,4 +84,6 @@ sudo chmod 755 /dev/keys_dev
 ./app_for_keys_platform_device_driver
 sudo rmmod keys_platform_device_driver.ko
 ```
+
+
 
