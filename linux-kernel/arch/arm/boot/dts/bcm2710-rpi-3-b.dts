@@ -92,6 +92,9 @@
 		status = "okay";
 	};
 
+	hellokeys {
+		compatible = "arrow,hellokeys";
+	};
 };
 
 &firmware {
