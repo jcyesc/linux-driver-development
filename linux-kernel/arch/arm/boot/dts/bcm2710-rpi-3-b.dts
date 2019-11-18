@@ -74,6 +74,12 @@
 		brcm,pins = <40 41>;
 		brcm,function = <4>;
 	};
+
+	led_pins: led_pins {
+		brcm,pins = <27 22 26>;
+		brcm,function = <1>;	/* Output */
+		brcm,pull = <1 1 1>;	/* Pull down */
+	};
 };
 
 &mmcnr {
@@ -94,6 +100,22 @@
 
 	hellokeys {
 		compatible = "arrow,hellokeys";
+	};
+
+	ledred {
+		compatible = "arrow,RGBleds";
+		label = "ledred";
+		pinctrl-0 = <&led_pins>;
+	};
+
+	ledgreen {
+		compatible = "arrow,RGBleds";
+		label = "ledgreen";
+	};
+
+	ledblue {
+		compatible = "arrow,RGBleds";
+		label = "ledblue";
 	};
 };
 
