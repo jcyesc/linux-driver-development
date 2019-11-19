@@ -71,13 +71,17 @@ macros/functions below:
 
 - A single value:
 
-	get_user(type val, type *address)
-	put_user(type val, type *address)
+```c
+get_user(type val, type *address)
+put_user(type val, type *address)
+```
 
 - A buffer
 
-	unsigned long copy_to_user(void __user *to, const void *from, unsigned long n)
-	unsigned long copy_from_user(void *to, const void __user *from, unsgined long n)
+```c
+unsigned long copy_to_user(void __user *to, const void *from, unsigned long n)
+unsigned long copy_from_user(void *to, const void __user *from, unsgined long n)
+```
 
 ## MMIO (Memory-Mapped I/O) Device Access
 
@@ -102,13 +106,17 @@ Below are the functions used to get I/O virtual addresses:
 
 - Map and remove mapping by using ioremap()/iounmap() functions.
 
-	void __iomem *ioremap(phys_addr_t offset, unsigned long size)
-	void iounmap(void *address)
+```c
+void __iomem *ioremap(phys_addr_t offset, unsigned long size)
+void iounmap(void *address)
+```
 
 - Map and remove mapping attached to the driver device by using the devm_ioremap()/devm_iounmap().
 
-	void __iomem *devm_ioremap(struct device *dev, resource_size_t offset, unsigned long size)
-	void devm_iounmap(struct device *dev, void __iomem *addr)
+```c
+void __iomem *devm_ioremap(struct device *dev, resource_size_t offset, unsigned long size)
+void devm_iounmap(struct device *dev, void __iomem *addr)
+```
 
 Each `struct device` manages a linked list of resources via its included
 `struct list_head_devres_head` structure. Calling a managed resource allocator like `devm_kzalloc()`
@@ -121,13 +129,14 @@ Deferencing the pointer returned by `devm_ioremap()` is not reliable. Cache and 
 might occur. The kernel provides functions to read and write to virtual address. To PCI-style, little-endian
 accesses, conversion being done automatically use the functions below:
 
-	unsigned int ioread8(void __iomem *addr);
-	unsigned int ioread16(void __iomem *addr);
-	unsigned int ioread32(void __iomem *addr);
-	void iowrite8(u8 value, void __iomem *addr);
-	void iowrite16(u16 value, void __iomem *addr);
-	void iowrite32(u32 value, void __iomem *addr);
-
+```c
+unsigned int ioread8(void __iomem *addr)
+unsigned int ioread16(void __iomem *addr)
+unsigned int ioread32(void __iomem *addr)
+void iowrite8(u8 value, void __iomem *addr)
+void iowrite16(u16 value, void __iomem *addr)
+void iowrite32(u32 value, void __iomem *addr)
+```
 
 ## LAB 1 - "Platform Device" module
 
