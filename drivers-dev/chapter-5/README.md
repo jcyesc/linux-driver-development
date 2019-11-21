@@ -237,7 +237,7 @@ cat /dev/ledred
 sudo rmmod led_rgb_platform_driver.ko
 ```
 
-## LAB 3 - "RGB LED clas Platform Device Driver and Led subsystem" 
+## LAB 3 - "RGB LED clas Platform Device Driver and Led subsystem"
 
 In this lab we will use the LED subsystem to control the leds. We will also
 create an input in the device tree `bcm2710-rpi-3-b.dts` that will contain
