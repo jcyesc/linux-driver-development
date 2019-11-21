@@ -256,7 +256,7 @@ the virtual space by using the `devm_ioremap()` function.
 The files used for this lab are:
 
 - chapter-5/lab-3/led_rgb_class_platform_driver.c
-- chapter-5/lab-2/Makefile (builds the .ko file)
+- chapter-5/lab-3/Makefile (builds the .ko file)
 - linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
 
 >Note: Remember to build the device tree (DT) and install the modules.
