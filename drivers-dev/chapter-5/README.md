@@ -236,3 +236,49 @@ cat /dev/ledgreen
 cat /dev/ledred
 sudo rmmod led_rgb_platform_driver.ko
 ```
+
+## LAB 3 - "RGB LED clas Platform Device Driver and Led subsystem" 
+
+In this lab we will use the LED subsystem to control the leds. We will also
+create an input in the device tree `bcm2710-rpi-3-b.dts` that will contain
+3 nodes, one for every led (green, red, blue).
+
+We will use in this new driver the `for_each_child_of_node()` function to walk
+through sub nodes of the main node. Only the main node will have the `compatible`
+property, so after the match of the device and driver is done, the `probe()` function
+will be called only once retrieving the info included in all the sub nodes. The LED RGB
+device has a `reg` property hat includes a GPIO register base address and the size of
+the address region it is assigned. After the driver and the device are probed, the
+`platform_get_resource()` function returns a `struct resource` filled with the `reg`
+property values soo that you an use these values later in the driver code, mapping them in
+the virtual space by using the `devm_ioremap()` function.
+
+The files used for this lab are:
+
+- chapter-5/lab-3/led_rgb_class_platform_driver.c
+- chapter-5/lab-2/Makefile (builds the .ko file)
+- linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+
+>Note: Remember to build the device tree (DT) and install the modules.
+
+After `copying` the `led_rgb_class_platform_driver.ko` in the Raspberry Pi,
+execute the following commands:
+
+```shell
+tar -f /var/log/syslog
+
+# in another shell
+sudo insmod led_rgb_class_platform_driver.ko
+ls /sys/class/leds /* see led devices*/
+sudo chmod 777 /sys/class/leds/red/brightness
+sudo chmod 777 /sys/class/leds/green/brightness
+sudo chmod 777 /sys/class/leds/green/trigger
+sudo chmod 777 /sys/class/leds/blue/brightness
+echo 1 > /sys/class/leds/red/brightness   /* set led red ON */
+echo 1 > /sys/class/leds/green/brightness   /* set led green ON and turn off red */
+echo 1 > /sys/class/leds/blue/brightness   /* set led blue ON and turn off green */
+echo timer > /sys/class/leds/green/trigger   /* set the timer trigger and see the led green blinking */
+sudo rmmod led_rgb_class_platform_driver.ko
+```
+
+

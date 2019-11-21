@@ -117,6 +117,26 @@
 		compatible = "arrow,RGBleds";
 		label = "ledblue";
 	};
+
+	ledclassRGB {
+		compatible = "arrow,RGBclassleds";
+		reg = <0x7e200000 0xb4>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&led_pins>;
+
+		red {
+			label = "red";
+		};
+
+		green {
+			label = "green";
+		};
+
+		blue {
+			label = "blue";
+			linux,default-trigger = "heartbeat";
+		};
+	};
 };
 
 &firmware {
