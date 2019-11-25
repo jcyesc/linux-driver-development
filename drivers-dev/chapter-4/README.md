@@ -96,7 +96,7 @@ The files used for this lab are:
 Note: Once that the Kconfig and Makefile files have been modified, run the following command:
 
 ```shell
-menu menuconfig ARCH=arm
+make menuconfig ARCH=arm
 ```
 
 Then go to `main menu -> Device Drivers -> Character devices -> Hello kernel module defined in the kernel source tree`. Hit <spacebar> once to see a <*> appear next to the new configuration. The other option is <m>, that means module.
