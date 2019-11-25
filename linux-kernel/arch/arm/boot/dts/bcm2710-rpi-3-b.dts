@@ -137,6 +137,13 @@
 			linux,default-trigger = "heartbeat";
 		};
 	};
+
+	UIO {
+		compatible = "arrow,UIO";
+		reg = <0x7e200000 0x1000>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&led_pins>;
+	};
 };
 
 &firmware {

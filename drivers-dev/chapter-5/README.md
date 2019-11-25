@@ -138,6 +138,47 @@ void iowrite16(u16 value, void __iomem *addr)
 void iowrite32(u32 value, void __iomem *addr)
 ```
 
+## UIO drivers or Platform Device Drives in the User Space
+
+Device drivers in Linux traditionally run in kernel space, but can also run in user space.
+It is not always necessary to write a device driver for a device, especially in applications
+where no two applications will require exclusive access. The most useful example of this is a
+memory mapped device, but you can also do this with devices in the I/O space.
+
+The Linux user space provides several advantages for device drivers, including more robust and
+flexible process management, standardized system call interface, simpler resource managemente,
+large number of libraries for XML, or other configuration methods, and regular expression
+parsing among others. Each call to the kernel (system call) must perform a switch from user
+mode to supervisor mode, and then back again. This takes time, which can become a performance
+bottleneck if the calls are frequent. It also makes applications more straightforward to debug
+by providing memory isolation and independent restart. At the same time, while kernel space
+applications need to conform to General Public License guidelines, user space applications are not
+bound by such restrictions.
+
+On the other hand, user space drivers have their own drawbacks. Interrupt handling is the biggest
+challenge for a user space driver. The function handling an interrupt is called in privileged
+execution mode, often called supervisor mode. User space drivers have no permission to execute
+in privileged execution mode, making it impossible for user space drivers to implement an
+interrupt handler. To deal with this problem we can perform polling or have a small kernel space
+driver handling only the interrupt. In the latter case, we can inform to the user space driver of an
+interrupt either by a blocking call, which unblocks when an interrupt occurs, or using a POSIX
+signal to preempt the user space driver. If user space driver must be accessible to multiple
+processes at once, and/or manage contention for a resource, then you also need to write a real
+device driver at the kernel level, and an user space driver will not be sufficient or even possible.
+Allocating memory that can be used for DMA transfers is also non-trivial for user space drivers. In
+kernel space there are also frameworks that help solve device interdepencies.
+
+### HOW UIO Works
+
+Each UIO device is accessed through a device vile and several sysfs attribute files. The device
+file will be called `/dev/uio0` for the first device, and /dev/uio1, /dev/uio2 and so on for
+subsequent devices.
+
+The UIO driver in the kernel creates file attributes in the sys filesystem describing the UIO device.
+The directory `/sys/class/uio` is the root for all the file attributes. A separate numbered directory
+structure is created under /sys/class/uio/ for each UIO device.
+
+
 ## LAB 1 - "Platform Device" module
 
 The functionality of this platform driver is the same as the misc char driver, but this time
@@ -281,4 +322,35 @@ echo timer > /sys/class/leds/green/trigger   /* set the timer trigger and see th
 sudo rmmod led_rgb_class_platform_driver.ko
 ```
 
+## LAB 4 - "RGB LED class Platform Device Driver and Led subsystem"
+
+In this kernel lab, we will develop a `UIO user space driver` that controls one LED. The
+main function of a UIO driver is to expose the hardware registers to user space and does
+nothing within kernel space to control them. The LED will be controlled directly from the UIO
+user space driver by accessing to the memory mapped registers of the device. We will also write
+a kernel driver that obtains the register addresses from the device tree and initializes the
+`struct uio_info` with these parameters. We will also register the UIO device within
+the `probe()` function of the kernel driver.
+
+>Note: Remember to build the device tree (DT) and install the modules.
+
+The UIO drivers must be enabled in the kernel. Configure the kernel with `make menuconfig ARCH=arm`.
+Navigate from the `main menu -> Device Drivers -> Userspace I/O drivers`. Hit <spacebar> once to
+see a <*> appear next to the new configuration. Hit <Exit> until you exit the menuconfig GUI and remember
+to save the new configuration. Compile the new image. We can also modify the `.config` file directly and
+set the following variable to y: `CONFIG_UIO=y`.
+
+After `copying` the `uio_platform_driver.ko` and `app_for_uio_platform_driver` files in the
+Raspberry Pi, execute the following commands:
+
+```shell
+tar -f /var/log/syslog
+
+# in another shell
+sudo insmod uio_platform_driver.ko
+more /dev/uio0
+ls /sys/class/uio/uio0
+sudo ./app_for_uio_platform_driver
+sudo rmmod uio_platform_driver.ko
+```
 
