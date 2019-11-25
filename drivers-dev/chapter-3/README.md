@@ -13,5 +13,15 @@ The default kernel builds most drivers into the kernel statically, so they are s
 automatically. A kernel module is not necessarily a device driver, it is an extension of
 the kernel. The kernel modules are loaded into virtual memory of the kernel. Building a
 device driver as a module makes the development easier since it can be loaded, tested, and
-unloaded without rebooting the kernel. The kernel modules are usually located in
-`/lib/module/<kernel_version>/` on the root filesystem.
+unloaded without rebooting the kernel.
+
+Kernel statically compiled modules are installed into `/lib/module/<kernel_version>/`
+on the root filesystem.
+
+A list of utilities to install and unistall modules is below:
+
+- insmod module.ko
+- rmmod module
+- lsmod
+- modinfo module_name
+- modprobe module [ module parameters ]
