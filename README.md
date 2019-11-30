@@ -75,7 +75,7 @@ exit 0
 Restart the Raspberry Pi.
 
 In the Mac, go to `System Preferences > Sharing` and select `Internet Sharing`
-and in the righte select `USB 10/100/100 LAN`.
+and in the right select `USB 10/100/100 LAN`.
 
 To connect using SSH, run the following command:
 
@@ -83,7 +83,7 @@ To connect using SSH, run the following command:
 ssh pi@192.168.2.2
 ```
 
-To transfer a file from the host to the targe, execute:
+To transfer a file from the host to the target, execute:
 
 ```shell
 scp my_file pi@192.168.2.2
