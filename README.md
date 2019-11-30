@@ -48,6 +48,47 @@ git commit -m "description"
 git push -u origin master
 ```
 
+## How to connect from the Mac(host) to the Raspberry Pi(target) using SSH
+
+On the Raspberry Pi board (the target), configure the eth0 interface
+with the IP address `192.168.2.2` by editing the `/etc/network/interfaces` file.
+
+```shell
+sudo nano /etc/network/interfaces
+
+auto eth0
+iface eth0 inet static
+   address 192.168.2.2
+   netmask 255.255.255.0
+```
+
+Configure ssh to start during booting time:
+
+```shell
+sudo nano /etc/rc.local
+
+/etc/init.d/ssh start
+
+exit 0
+```
+
+Restart the Raspberry Pi.
+
+In the Mac, go to `System Preferences > Sharing` and select `Internet Sharing`
+and in the righte select `USB 10/100/100 LAN`.
+
+To connect using SSH, run the following command:
+
+```shell
+ssh pi@192.168.2.2
+```
+
+To transfer a file from the host to the targe, execute:
+
+```shell
+scp my_file pi@192.168.2.2
+```
+
 ## Commands to build and install the kernel 
 
 For all the configuration commands see https://www.raspberrypi.org/documentation/linux/kernel/building.md
