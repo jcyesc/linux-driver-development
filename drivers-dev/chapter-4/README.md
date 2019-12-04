@@ -42,7 +42,7 @@ There are two ways to create device nodes or virtual files:
 
 1. mknod (not preferred)
 2. devtmpfs 
-3.  Miscellaneous framework.
+3. Miscellaneous framework.
 
 
 ## LAB 1.a (uses mknod) - helloworld_char_driver.c
