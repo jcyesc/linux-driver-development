@@ -98,6 +98,10 @@
 		status = "okay";
 	};
 
+	netgpio {
+		compatible = "custom,netgpio";
+	};
+
 	hellokeys {
 		compatible = "arrow,hellokeys";
 	};
