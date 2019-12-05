@@ -6,7 +6,8 @@
 # Once that the .ko file is created, we need to copy it to the target (Raspberry pi)
 # and install it with the "insmod" command.
 
-obj-m += net_gpio_driver.o
+obj-m := net_gpio_driver_module.o
+net_gpio_driver_module-objs := net_gpio_controller.o net_gpio_driver.o
 
 KERNEL_DIR ?= $(HOME)/Development/linux-driver-dev/linux-kernel
 

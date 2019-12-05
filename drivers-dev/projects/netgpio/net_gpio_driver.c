@@ -13,6 +13,8 @@
 #include <linux/mod_devicetable.h>
 #include <linux/types.h>
 
+extern void net_gpio_controller_process(void);
+
 /**
  * File Operations for the NET GPIO Driver.
  */
@@ -79,6 +81,9 @@ static int __init net_gpio_probe(struct platform_device *pdev) {
 
 	pr_info("netgpio: old minor %i, new minor %i\n",
 		MISC_DYNAMIC_MINOR, net_gpio_miscdevice.minor);
+
+	net_gpio_controller_process();
+
 
 	return 0;
 }

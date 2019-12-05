@@ -15,6 +15,7 @@ GPIO pins.
 The files used for this project are:
 
 - projects/netgpio/net_gpio_driver.c
+- projects/netgpio/net_gpio_controller.c
 - projects/netgpio/Makefile (builds the .ko file)
 - linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
 
@@ -23,20 +24,20 @@ The files used for this project are:
 In the host, execute the following command to copy the module:
 
 ```shell
-scp net_gpio_driver.ko  pi@192.168.2.2:/home/pi/my_modules
+scp net_gpio_driver_module.ko  pi@192.168.2.2:/home/pi/my_modules
 ```
 
-After `copying` the `net_gpio_driver.ko` file in the Raspberry Pi,
+After `copying` the `net_gpio_driver_module.ko` file in the Raspberry Pi,
 execute the following commands:
 
 ```shell
 tar -f /var/log/syslog
 
 # in another shell
-sudo insmod net_gpio_driver.ko
+sudo insmod net_gpio_driver_module.ko
 ls /dev/ /* see netgpio device*/
 ls -la /sys/class/misc/netgpio/
 sudo chmod 777 /dev/netgpio
 echo 1 > /dev/netgpio
-sudo rmmod net_gpio_driver.ko
+sudo rmmod net_gpio_driver_module.ko
 ```
