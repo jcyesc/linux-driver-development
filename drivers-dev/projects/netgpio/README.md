@@ -35,9 +35,32 @@ tar -f /var/log/syslog
 
 # in another shell
 sudo insmod net_gpio_driver_module.ko
+
 ls /dev/ /* see netgpio device*/
 ls -la /sys/class/misc/netgpio/
+
 sudo chmod 777 /dev/netgpio
 echo 1 > /dev/netgpio
-sudo rmmod net_gpio_driver_module.ko
+
+sudo chmod 777 /sys/class/leds/bit0/brightness
+sudo chmod 777 /sys/class/leds/bit1/brightness
+sudo chmod 777 /sys/class/leds/bit2/brightness
+
+sudo chmod 777 /sys/class/leds/bit0/trigger
+sudo chmod 777 /sys/class/leds/bit1/trigger
+sudo chmod 777 /sys/class/leds/bit2/trigger
+
+echo 1 > /sys/class/leds/bit0/brightness
+echo 1 > /sys/class/leds/bit1/brightness
+echo 1 > /sys/class/leds/bit2/brightness
+
+echo 0 > /sys/class/leds/bit0/brightness
+echo 0 > /sys/class/leds/bit1/brightness
+echo 0 > /sys/class/leds/bit2/brightness
+
+echo timer > /sys/class/leds/bit0/trigger
+echo timer > /sys/class/leds/bit1/trigger
+echo timer > /sys/class/leds/bit2/trigger
+
+sudo rmmod net_gpio_driver_module
 ```

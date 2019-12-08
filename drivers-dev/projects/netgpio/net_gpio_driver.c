@@ -6,14 +6,17 @@
  * locks to prevent the data from corruption.
  */
 
+#include <linux/of.h>
 #include <linux/module.h>
 #include <linux/fs.h>
 #include <linux/platform_device.h>
+#include <linux/io.h>
+#include <linux/types.h>
 #include <linux/miscdevice.h>
 #include <linux/mod_devicetable.h>
 #include <linux/types.h>
 
-extern void net_gpio_controller_process(void);
+extern int net_gpio_controller_config_leds(void __iomem *ioremap_addr, struct device *dev);
 
 /**
  * File Operations for the NET GPIO Driver.
@@ -39,7 +42,6 @@ static ssize_t net_gpio_write(struct file *file, const char __user *buff, size_t
 
 	return count;
 }
-
 
 /* Reads from the device "/dev/netgpio". */
 static ssize_t net_gpio_read(struct file *file, char __user *buff, size_t count, loff_t *ppos) {
@@ -71,9 +73,15 @@ static struct miscdevice net_gpio_miscdevice = {
 /* Registers the miscellaneous device. */
 static int __init net_gpio_probe(struct platform_device *pdev) {
 	int ret;
-	pr_info("net_gpio_probe() is executing.\n");
-	ret = misc_register(&net_gpio_miscdevice);
+	struct resource *mem_resource;
+	unsigned int resource_number = 0;
+	void __iomem *ioremap_addr;
+	struct device *net_gpio_dev = &pdev->dev;
 
+	pr_info("net_gpio_probe() is executing.\n");
+
+	/* Registers the miscellaneous device. */
+	ret = misc_register(&net_gpio_miscdevice);
 	if (ret != 0) {
 		pr_err("could not register the misc device net_gpio_miscdevice");
 		return ret;
@@ -82,8 +90,25 @@ static int __init net_gpio_probe(struct platform_device *pdev) {
 	pr_info("netgpio: old minor %i, new minor %i\n",
 		MISC_DYNAMIC_MINOR, net_gpio_miscdevice.minor);
 
-	net_gpio_controller_process();
+	/* Gets the IO memory resource */
+	mem_resource = platform_get_resource(pdev, IORESOURCE_MEM, resource_number);
+	if (!mem_resource) {
+		pr_err("IORESOURCE_MEM is not defined \n");
+		return -EINVAL;
+	}
 
+	pr_info("mem_resource->start = 0x%08lx\n", (long unsigned int) mem_resource->start);
+	pr_info("mem_resource->end = 0x%08lx\n", (long unsigned int) mem_resource->end);
+
+	/* ioremaps the memory region */
+	ioremap_addr = devm_ioremap(net_gpio_dev, mem_resource->start, resource_size(mem_resource));
+	if (!ioremap_addr) {
+		pr_err("dev_ioremap() failed \n");
+		return -ENOMEM;
+	}
+
+	/* Configures and sets the pins. */
+	net_gpio_controller_config_leds(ioremap_addr, net_gpio_dev);
 
 	return 0;
 }

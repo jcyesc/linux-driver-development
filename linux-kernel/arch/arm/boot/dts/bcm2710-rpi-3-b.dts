@@ -100,6 +100,19 @@
 
 	netgpio {
 		compatible = "custom,netgpio";
+		reg = <0x7e200000 0x1000>;
+
+		bit_0 {
+			label = "bit0";
+		};
+
+		bit_1 {
+			label = "bit1";
+		};
+
+		bit_2 {
+			label = "bit2";
+		};
 	};
 
 	hellokeys {
