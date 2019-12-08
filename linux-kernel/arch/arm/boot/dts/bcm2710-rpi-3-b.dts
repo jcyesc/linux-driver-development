@@ -113,6 +113,26 @@
 		bit_2 {
 			label = "bit2";
 		};
+
+		bit_3 {
+			label = "bit3";
+		};
+
+		bit_4 {
+			label = "bit4";
+		};
+
+		bit_5 {
+			label = "bit5";
+		};
+
+		bit_6 {
+			label = "bit6";
+		};
+
+		bit_7 {
+			label = "bit7";
+		};
 	};
 
 	hellokeys {

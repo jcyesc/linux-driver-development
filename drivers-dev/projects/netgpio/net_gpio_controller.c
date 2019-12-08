@@ -6,7 +6,12 @@
 #include <linux/stddef.h>
 #include <linux/types.h>
 
+#define GPIO_20			20
+#define GPIO_21			21
 #define GPIO_22			22
+#define GPIO_23			23
+#define GPIO_24			24
+#define GPIO_25			25
 #define GPIO_26			26
 #define GPIO_27			27
 
@@ -14,26 +19,46 @@
 #define GPSET0_offset    0x1C
 #define GPCLR0_offset 	 0x28
 
-/* to set and clear each individual LED */
+/* To set and clear each individual LED */
+#define GPIO_20_INDEX 	1 << (GPIO_20 % 32)
+#define GPIO_21_INDEX 	1 << (GPIO_21 % 32)
 #define GPIO_22_INDEX 	1 << (GPIO_22 % 32)
+#define GPIO_23_INDEX 	1 << (GPIO_23 % 32)
+#define GPIO_24_INDEX 	1 << (GPIO_24 % 32)
+#define GPIO_25_INDEX 	1 << (GPIO_25 % 32)
 #define GPIO_26_INDEX 	1 << (GPIO_26 % 32)
 #define GPIO_27_INDEX 	1 << (GPIO_27 % 32)
 
-/* select the output function */
+/* Select the output function */
+#define GPIO_20_FUNC 	1 << ((GPIO_20 % 10) * 3)
+#define GPIO_21_FUNC 	1 << ((GPIO_21 % 10) * 3)
 #define GPIO_22_FUNC 	1 << ((GPIO_22 % 10) * 3)
-#define GPIO_27_FUNC	1 << ((GPIO_27 % 10) * 3)
+#define GPIO_23_FUNC 	1 << ((GPIO_23 % 10) * 3)
+#define GPIO_24_FUNC 	1 << ((GPIO_24 % 10) * 3)
+#define GPIO_25_FUNC 	1 << ((GPIO_25 % 10) * 3)
 #define GPIO_26_FUNC 	1 << ((GPIO_26 % 10) * 3)
+#define GPIO_27_FUNC	1 << ((GPIO_27 % 10) * 3)
 
-#define FSEL_22_MASK 	0b111 << ((GPIO_22 % 10) * 3) /* green since bit 6 (FSEL22) */
-#define FSEL_27_MASK 	0b111 << ((GPIO_27 % 10) * 3) /* red since bit 21 (FSEL27) */
-#define FSEL_26_MASK 	0b111 << ((GPIO_26 % 10) * 3) /* blue since bit 18 (FSEL26) */
+#define FSEL_20_MASK 	0b111 << ((GPIO_20 % 10) * 3)
+#define FSEL_21_MASK 	0b111 << ((GPIO_21 % 10) * 3)
+#define FSEL_22_MASK 	0b111 << ((GPIO_22 % 10) * 3)
+#define FSEL_23_MASK 	0b111 << ((GPIO_23 % 10) * 3)
+#define FSEL_24_MASK 	0b111 << ((GPIO_24 % 10) * 3)
+#define FSEL_25_MASK 	0b111 << ((GPIO_25 % 10) * 3)
+#define FSEL_26_MASK 	0b111 << ((GPIO_26 % 10) * 3)
+#define FSEL_27_MASK 	0b111 << ((GPIO_27 % 10) * 3)
 
-#define GPIO_SET_FUNCTION_LEDS (GPIO_22_FUNC | GPIO_27_FUNC | GPIO_26_FUNC)
-#define GPIO_MASK_ALL_LEDS 	(FSEL_22_MASK | FSEL_27_MASK | FSEL_26_MASK)
-#define GPIO_SET_ALL_LEDS (GPIO_22_INDEX | GPIO_27_INDEX | GPIO_26_INDEX)
+#define GPIO_SET_FUNCTION_LEDS (GPIO_20_FUNC | GPIO_21_FUNC | GPIO_22_FUNC | GPIO_23_FUNC | GPIO_24_FUNC | GPIO_25_FUNC | GPIO_26_FUNC | GPIO_27_FUNC)
+#define GPIO_MASK_ALL_LEDS 	(FSEL_20_MASK | FSEL_21_MASK | FSEL_22_MASK | FSEL_23_MASK | FSEL_24_MASK | FSEL_25_MASK | FSEL_26_MASK | FSEL_27_MASK)
+#define GPIO_SET_ALL_LEDS (GPIO_20_INDEX | GPIO_21_INDEX | GPIO_22_INDEX | GPIO_23_INDEX | GPIO_24_INDEX | GPIO_25_INDEX | GPIO_26_INDEX | GPIO_27_INDEX)
 
-const int GPIO_INDEX_MASKS[3] = {
+const int GPIO_INDEX_MASKS[8] = {
+	GPIO_20_INDEX,
+	GPIO_21_INDEX,
 	GPIO_22_INDEX,
+	GPIO_23_INDEX,
+	GPIO_24_INDEX,
+	GPIO_25_INDEX,
 	GPIO_26_INDEX,
 	GPIO_27_INDEX
 };
@@ -157,7 +182,7 @@ int net_gpio_controller_config_leds(void __iomem *ioremap_addr, struct device *n
 	gpfsel_write = (gpfsel_read & ~GPIO_MASK_ALL_LEDS) |
 					(GPIO_SET_FUNCTION_LEDS & GPIO_MASK_ALL_LEDS);
 
-	iowrite32(gpfsel_write, ioremap_addr + GPFSEL2_offset); /* set dir leds to output */
+	iowrite32(gpfsel_write, ioremap_addr + GPFSEL2_offset); /* Set direction to output */
 	iowrite32(GPIO_SET_ALL_LEDS, ioremap_addr + GPCLR0_offset); /* Clear all the leds, output is low */
 	/* End: Configure LED registers as output and clear all the leds, so output is low */
 
@@ -187,14 +212,9 @@ MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("Net GPIO platform driver to control led output.");
 
 
-// TODO: Configure and test the 8 leds
 // TODO: Design and implement how the net_gpio_driver is going to control the leds
 // (should we return an array of led_device structures)?
 // TODO Add locking mechanism
 // TODO Write client application
-// TODO Add data to the queue
-
-
-
-
+// TODO Design and implement a Queue
 

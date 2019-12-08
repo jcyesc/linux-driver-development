@@ -45,22 +45,56 @@ echo 1 > /dev/netgpio
 sudo chmod 777 /sys/class/leds/bit0/brightness
 sudo chmod 777 /sys/class/leds/bit1/brightness
 sudo chmod 777 /sys/class/leds/bit2/brightness
+sudo chmod 777 /sys/class/leds/bit3/brightness
+sudo chmod 777 /sys/class/leds/bit4/brightness
+sudo chmod 777 /sys/class/leds/bit5/brightness
+sudo chmod 777 /sys/class/leds/bit6/brightness
+sudo chmod 777 /sys/class/leds/bit7/brightness
 
 sudo chmod 777 /sys/class/leds/bit0/trigger
 sudo chmod 777 /sys/class/leds/bit1/trigger
 sudo chmod 777 /sys/class/leds/bit2/trigger
+sudo chmod 777 /sys/class/leds/bit3/trigger
+sudo chmod 777 /sys/class/leds/bit4/trigger
+sudo chmod 777 /sys/class/leds/bit5/trigger
+sudo chmod 777 /sys/class/leds/bit6/trigger
+sudo chmod 777 /sys/class/leds/bit7/trigger
 
 echo 1 > /sys/class/leds/bit0/brightness
 echo 1 > /sys/class/leds/bit1/brightness
 echo 1 > /sys/class/leds/bit2/brightness
+echo 1 > /sys/class/leds/bit3/brightness
+echo 1 > /sys/class/leds/bit4/brightness
+echo 1 > /sys/class/leds/bit5/brightness
+echo 1 > /sys/class/leds/bit6/brightness
+echo 1 > /sys/class/leds/bit7/brightness
 
 echo 0 > /sys/class/leds/bit0/brightness
 echo 0 > /sys/class/leds/bit1/brightness
 echo 0 > /sys/class/leds/bit2/brightness
+echo 0 > /sys/class/leds/bit3/brightness
+echo 0 > /sys/class/leds/bit4/brightness
+echo 0 > /sys/class/leds/bit5/brightness
+echo 0 > /sys/class/leds/bit6/brightness
+echo 0 > /sys/class/leds/bit7/brightness
 
 echo timer > /sys/class/leds/bit0/trigger
 echo timer > /sys/class/leds/bit1/trigger
 echo timer > /sys/class/leds/bit2/trigger
+echo timer > /sys/class/leds/bit3/trigger
+echo timer > /sys/class/leds/bit4/trigger
+echo timer > /sys/class/leds/bit5/trigger
+echo timer > /sys/class/leds/bit6/trigger
+echo timer > /sys/class/leds/bit7/trigger
+
+echo timer > /sys/class/leds/bit0/trigger
+echo 0 > /sys/class/leds/bit1/brightness
+echo timer > /sys/class/leds/bit2/trigger
+echo 0 > /sys/class/leds/bit3/brightness
+echo timer > /sys/class/leds/bit4/trigger
+echo 0 > /sys/class/leds/bit5/brightness
+echo timer > /sys/class/leds/bit6/trigger
+echo 0 > /sys/class/leds/bit7/brightness
 
 sudo rmmod net_gpio_driver_module
 ```
