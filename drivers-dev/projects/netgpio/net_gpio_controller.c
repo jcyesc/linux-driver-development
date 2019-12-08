@@ -52,7 +52,9 @@
 #define GPIO_MASK_ALL_LEDS 	(FSEL_20_MASK | FSEL_21_MASK | FSEL_22_MASK | FSEL_23_MASK | FSEL_24_MASK | FSEL_25_MASK | FSEL_26_MASK | FSEL_27_MASK)
 #define GPIO_SET_ALL_LEDS (GPIO_20_INDEX | GPIO_21_INDEX | GPIO_22_INDEX | GPIO_23_INDEX | GPIO_24_INDEX | GPIO_25_INDEX | GPIO_26_INDEX | GPIO_27_INDEX)
 
-const int GPIO_INDEX_MASKS[8] = {
+#define NUM_NET_GPIOS 8
+
+const int GPIO_INDEX_MASKS[NUM_NET_GPIOS] = {
 	GPIO_20_INDEX,
 	GPIO_21_INDEX,
 	GPIO_22_INDEX,
@@ -70,6 +72,9 @@ struct led_dev {
 	struct led_classdev cdev;
 };
 
+/* Contains pointers to struct led_dev objects that have been already initialized. */
+static struct led_dev *led_devs[NUM_NET_GPIOS];
+
 /* Sets the brightness of the led represented by {@code led_dev}. */
 static void led_control(struct led_classdev *led_cdev, enum led_brightness b)
 {
@@ -86,6 +91,27 @@ static void led_control(struct led_classdev *led_cdev, enum led_brightness b)
 	}
 
 	pr_info("led_control() ends for led name [%s]\n", led->cdev.name);
+}
+
+/*
+ * Set the brightness of the leds according to {@code int gpio_net_brightness[]}.
+ * @return 0 success, otherwise it returns a negative number.
+ */
+int net_gpio_controller_set_led_brightness(int gpio_net_brightness[], int num_gpios) {
+	int index;
+
+	if (num_gpios > NUM_NET_GPIOS) {
+		pr_err("Invalid number of gpios\n");
+		return -EINVAL;
+	}
+
+	for (index = 0; index < num_gpios; index++) {
+		struct led_dev *led = led_devs[index];
+		enum led_brightness brigthtness = gpio_net_brightness[index] ? LED_ON : LED_OFF;
+		led->cdev.brightness_set(&led->cdev, brigthtness);
+	}
+
+	return 0;
 }
 
 /*
@@ -139,6 +165,8 @@ static inline int net_gpio_controller_config_child_node(
 		return -ENOMEM;
 	}
 
+	led_devs[index_node] = led_device;
+
 	class_dev = &led_device->cdev;
 	/* Setting the child node name into struct led_class_dev */
 	of_property_read_string(child_node, "label", &class_dev->name);
@@ -149,6 +177,7 @@ static inline int net_gpio_controller_config_child_node(
 		of_node_put(child_node);
 		return -EINVAL;
 	}
+
 
 	pr_info("net_gpio_controller_config_child_node() ends - child_node->name = %s\n", child_node->name);
 	return 0;
@@ -212,9 +241,7 @@ MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("Net GPIO platform driver to control led output.");
 
 
-// TODO: Design and implement how the net_gpio_driver is going to control the leds
-// (should we return an array of led_device structures)?
 // TODO Add locking mechanism
 // TODO Write client application
-// TODO Design and implement a Queue
+
 

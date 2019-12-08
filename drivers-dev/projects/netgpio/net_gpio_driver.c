@@ -6,17 +6,18 @@
  * locks to prevent the data from corruption.
  */
 
-#include <linux/of.h>
-#include <linux/module.h>
+#include <linux/delay.h>
 #include <linux/fs.h>
-#include <linux/platform_device.h>
 #include <linux/io.h>
-#include <linux/types.h>
+#include <linux/of.h>
 #include <linux/miscdevice.h>
 #include <linux/mod_devicetable.h>
+#include <linux/module.h>
+#include <linux/platform_device.h>
 #include <linux/types.h>
 
 extern int net_gpio_controller_config_leds(void __iomem *ioremap_addr, struct device *dev);
+extern int net_gpio_controller_set_led_brightness(int gpio_net_values[], int num_gpios);
 
 /**
  * File Operations for the NET GPIO Driver.
@@ -38,7 +39,64 @@ static int net_gpio_close(struct inode *inode, struct file *file) {
 
 /* Writes to the device "/dev/netgpio". */
 static ssize_t net_gpio_write(struct file *file, const char __user *buff, size_t count, loff_t *ppos) {
+	int net_gpio_values0[8] = {0, 0, 0, 0, 0, 0, 0, 1};
+	int net_gpio_values1[8] = {0, 0, 0, 0, 0, 0, 1, 0};
+	int net_gpio_values2[8] = {0, 0, 0, 0, 0, 1, 0, 0};
+	int net_gpio_values3[8] = {0, 0, 0, 0, 1, 0, 0, 0};
+	int net_gpio_values4[8] = {0, 0, 0, 1, 0, 0, 0, 0};
+	int net_gpio_values5[8] = {0, 0, 1, 0, 0, 0, 0, 0};
+	int net_gpio_values6[8] = {0, 1, 0, 0, 0, 0, 0, 0};
+	int net_gpio_values7[8] = {1, 0, 0, 0, 0, 0, 0, 0};
+
 	pr_info("net_gpio_write() is executing.\n");
+
+	net_gpio_controller_set_led_brightness(net_gpio_values0, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values1, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values2, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values3, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values4, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values5, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values6, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values7, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values7, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values6, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values5, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values4, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values3, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values2, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values1, 8);
+	mdelay(200);
+
+	net_gpio_controller_set_led_brightness(net_gpio_values0, 8);
+	mdelay(200);
 
 	return count;
 }
