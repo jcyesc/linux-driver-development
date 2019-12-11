@@ -16,8 +16,13 @@
 #include <linux/platform_device.h>
 #include <linux/types.h>
 
+#include <linux/spinlock.h>
+#include <linux/spinlock_types.h>
+
 extern int net_gpio_controller_config_leds(void __iomem *ioremap_addr, struct device *dev);
 extern int net_gpio_controller_set_led_brightness(int gpio_net_values[], int num_gpios);
+
+static DEFINE_SPINLOCK(net_gpio_lock);
 
 /**
  * File Operations for the NET GPIO Driver.
@@ -50,6 +55,8 @@ static ssize_t net_gpio_write(struct file *file, const char __user *buff, size_t
 
 	pr_info("net_gpio_write() is executing.\n");
 
+	spin_lock(&net_gpio_lock);;
+
 	net_gpio_controller_set_led_brightness(net_gpio_values0, 8);
 	mdelay(200);
 
@@ -97,6 +104,8 @@ static ssize_t net_gpio_write(struct file *file, const char __user *buff, size_t
 
 	net_gpio_controller_set_led_brightness(net_gpio_values0, 8);
 	mdelay(200);
+
+	spin_unlock(&net_gpio_lock);
 
 	return count;
 }

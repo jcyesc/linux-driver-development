@@ -240,8 +240,6 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("Net GPIO platform driver to control led output.");
 
-
-// TODO Add locking mechanism
 // TODO Write client application
 
 
