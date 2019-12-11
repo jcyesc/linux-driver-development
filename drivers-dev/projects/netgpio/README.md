@@ -96,5 +96,8 @@ echo 0 > /sys/class/leds/bit5/brightness
 echo timer > /sys/class/leds/bit6/trigger
 echo 0 > /sys/class/leds/bit7/brightness
 
+echo '00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000' > /dev/netgpio &
+echo '00011000 00100100 01000010 10000001 10000001 01000010 00100100 00011000' > /dev/netgpio &
+
 sudo rmmod net_gpio_driver_module
 ```
