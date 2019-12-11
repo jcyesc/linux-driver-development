@@ -6,6 +6,8 @@
 #include <linux/stddef.h>
 #include <linux/types.h>
 
+#include "net_gpio_controller.h"
+
 #define GPIO_20			20
 #define GPIO_21			21
 #define GPIO_22			22
@@ -52,8 +54,6 @@
 #define GPIO_MASK_ALL_LEDS 	(FSEL_20_MASK | FSEL_21_MASK | FSEL_22_MASK | FSEL_23_MASK | FSEL_24_MASK | FSEL_25_MASK | FSEL_26_MASK | FSEL_27_MASK)
 #define GPIO_SET_ALL_LEDS (GPIO_20_INDEX | GPIO_21_INDEX | GPIO_22_INDEX | GPIO_23_INDEX | GPIO_24_INDEX | GPIO_25_INDEX | GPIO_26_INDEX | GPIO_27_INDEX)
 
-#define NUM_NET_GPIOS 8
-
 const int GPIO_INDEX_MASKS[NUM_NET_GPIOS] = {
 	GPIO_20_INDEX,
 	GPIO_21_INDEX,
@@ -80,7 +80,7 @@ static void led_control(struct led_classdev *led_cdev, enum led_brightness b)
 {
 	struct led_dev *led = container_of(led_cdev, struct led_dev, cdev);
 
-	pr_info("led_control() starts for led name [%s]\n", led->cdev.name);
+	// pr_info("led_control() starts for led name [%s]\n", led->cdev.name);
 
 	if (b != LED_OFF) {
 		/* Turn on led */
@@ -90,7 +90,7 @@ static void led_control(struct led_classdev *led_cdev, enum led_brightness b)
 		iowrite32(led->mask, led->mem_base + GPCLR0_offset); /* LED OFF */
 	}
 
-	pr_info("led_control() ends for led name [%s]\n", led->cdev.name);
+	// pr_info("led_control() ends for led name [%s]\n", led->cdev.name);
 }
 
 /*
@@ -239,7 +239,4 @@ int net_gpio_controller_config_leds(void __iomem *ioremap_addr, struct device *n
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Juan Yescas");
 MODULE_DESCRIPTION("Net GPIO platform driver to control led output.");
-
-// TODO Write client application
-
 
