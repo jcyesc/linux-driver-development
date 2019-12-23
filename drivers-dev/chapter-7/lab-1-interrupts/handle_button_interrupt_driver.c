@@ -6,7 +6,7 @@
  *
  * This module provides a handler for the interrupt that waits
  * 500ms after is executed to avoid bouncing (the switch(button) bounces
- * between high and low (5v, 0v) before the signal is stabilized.
+ * between high and low (5v, 0v) before the signal is stabilized).
  */
 
 #include <linux/delay.h>
@@ -61,8 +61,8 @@ static int __init button_dev_probe(struct platform_device *pdev) {
 	 * however, after removing the module and loading for second time,
 	 * the function platform_get_irq() fails.
 	 *
-	irq = platform_get_irq(p
-		dev,
+	irq = platform_get_irq(
+		pdev,
 		0 // IRQ index resource number
 		);
 	if (irq < 0) {
