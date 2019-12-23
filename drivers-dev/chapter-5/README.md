@@ -322,7 +322,7 @@ echo timer > /sys/class/leds/green/trigger   /* set the timer trigger and see th
 sudo rmmod led_rgb_class_platform_driver.ko
 ```
 
-## LAB 4 - "RGB LED class Platform Device Driver and Led subsystem"
+## LAB 4 - "RGB LED UIO Driver"
 
 In this kernel lab, we will develop a `UIO user space driver` that controls one LED. The
 main function of a UIO driver is to expose the hardware registers to user space and does
