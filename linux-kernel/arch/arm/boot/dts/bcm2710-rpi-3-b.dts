@@ -80,6 +80,12 @@
 		brcm,function = <1>;	/* Output */
 		brcm,pull = <1 1 1>;	/* Pull down */
 	};
+
+	interrupt_key_pin: interrupt_key_pin {
+		brcm,pins = <23>;
+		brcm,function = <0>;	/* Input */
+		brcm,pull = <1>; 		/* Pull down */
+	};
 };
 
 &mmcnr {
@@ -180,6 +186,15 @@
 		reg = <0x7e200000 0x1000>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&led_pins>;
+	};
+
+	interrupt_key {
+		compatible = "button_dev,intkey";
+		pinctrl-names = "default";
+		pinctrl-0 = <&interrupt_key_pin>;
+		gpios = <&gpio 23 0>;
+		interrupts = <23 1>;
+		interrupt-parent = <&gpio>;
 	};
 };
 
