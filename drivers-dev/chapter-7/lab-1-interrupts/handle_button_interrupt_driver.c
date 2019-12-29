@@ -35,6 +35,8 @@ static int irq;
  *
  * In order to test this, press the switch several times during 3 seconds. The delay that
  * this handler has is 5000ms.
+ *
+ * Note: This delay also avoids the bouncing of the switch.
  */
 static irqreturn_t button_pressed_interrupt_handler(int irq, void *data) {
 	static int counter = 1;

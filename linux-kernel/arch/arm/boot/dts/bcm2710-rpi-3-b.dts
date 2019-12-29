@@ -193,7 +193,16 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&interrupt_key_pin>;
 		gpios = <&gpio 23 0>;
-		interrupts = <23 1>;
+		interrupts = <23 IRQ_TYPE_EDGE_RISING>; /* The IRQ definitions are in <linux/irq.h> */
+		interrupt-parent = <&gpio>;
+	};
+
+	interrupt_key_wait {
+		compatible = "button_dev,intkeywait";
+		pinctrl-names = "default";
+		pinctrl-0 = <&interrupt_key_pin>;
+		gpios = <&gpio 23 0>;
+		interrupts = <23 IRQ_TYPE_EDGE_BOTH>; /* The IRQ definitions are in <linux/irq.h> */
 		interrupt-parent = <&gpio>;
 	};
 

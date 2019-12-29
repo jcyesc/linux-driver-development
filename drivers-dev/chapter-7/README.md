@@ -96,3 +96,14 @@ echo 10000 > /sys/devices/platform/soc/soc\:timer_work_dts/period
 sudo rmmod timer_deferred_work_driver 
 ```
 
+## Lab 2 - Handling interrupts and waiting for a condition
+
+```shell
+cd my_modules/
+sudo insmod handle_interrupt_wait_driver.ko 
+sudo chmod 777 /dev/miscdevice_name_wait 
+cat /dev/miscdevice_name_wait 
+sudo rmmod handle_interrupt_wait_driver 
+```
+
+
