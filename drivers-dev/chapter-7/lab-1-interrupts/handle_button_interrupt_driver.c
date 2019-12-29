@@ -21,12 +21,30 @@
 static char *INTERRUPT_KEY_NAME = "PB_KEY";
 static int irq;
 
-/* Interrupt handler */
+/*
+ * Interrupt handler
+ *
+ * Note: While the interrupt handler is processing the interrupt, if another interrupt
+ * of this kind is generated, it is not processed till the interrupt handler has completed.
+ *
+ * When the interrupt happens, there is an interrupt register that is cleared, if another
+ * interrupt happens while processing the interrupt, the interrupt register is set and when
+ * the interrupt handler has finished, it is executed again. This means that if there are
+ * several interrupts while the interrupt handler is being processed, only one it is processed
+ * after the first execution of the interrupt handler.
+ *
+ * In order to test this, press the switch several times during 3 seconds. The delay that
+ * this handler has is 5000ms.
+ */
 static irqreturn_t button_pressed_interrupt_handler(int irq, void *data) {
+	static int counter = 1;
 	struct device *dev = data;
-	dev_info(dev, "interrupt received. Key %s\n", INTERRUPT_KEY_NAME);
+	dev_info(dev, "Start processing interrupt. Key %s, counter %d\n", INTERRUPT_KEY_NAME, counter);
 
-	mdelay(500); /* Wait 500ms to avoid bouncing. */
+	mdelay(5000); /* Wait 5000ms to avoid bouncing. */
+	dev_info(dev, "End processing interrupt. Key %s, counter %d\n", INTERRUPT_KEY_NAME, counter);
+
+	counter++;
 	return IRQ_HANDLED;
 }
 
