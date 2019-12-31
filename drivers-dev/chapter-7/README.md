@@ -23,6 +23,38 @@ To summarize, the main types of deferred work are kernel threads and softirqs. W
 queues and bottom-half of threaded irqs are implemented on top of kernel threads that
 are able to block and tasklets and timers on top of softirqs that cannot block functions.
 
+## Using locks
+
+There are two main types of kernel locks. The fundamental type is the `spinlock`
+(include/asm/spinlock.h), which is a very simple single-holder lock; if you can't get the
+spinlock, you keep trying (spinning) until you can (disables the preemption in the running
+core). Spinlocks are very small and fast, and can be used anywhere.
+
+The second type is a `mutex` (include/linux/mutex.h); it is like a spinlock, but you may block
+holding a mutex. If you can't lock a mutex, your task will suspend itself, and be  woken up when
+the mutex is released. This means the CPU can do something else while you are waiting.
+
+## Sharing Spinlocks between Interrupt and Process Context
+
+It's possible that a critical section needs to be protected by the same lock in both an interrupt
+and in non-interrupt (process) execution context in the kernel. In this case `spin_lock_irqsave()`
+and the `spin_unlock_irqrestore()` variants have to be used to protect the critical section. This
+has the effect of disabling interrupts on the executing CPU. You can see in the steps below what could
+happen if you just used `spin_lock()` in the process context:
+
+1. Process context kernel code acquires the spinlock usin `spin_lock()`.
+2. While the spinlock is held, an interrupt comes in on the same CPU and executes.
+3. Interrupt Service Routine (ISR) tries to acquire the spinlock, and spins continuously
+waiting for it. Process context is blocked in the CPU and there is never a chance to run again
+and free the spinlock.
+
+To prevent this, the process context code needs call `spin_lock)irqsave()`, which has the effect of
+disabling interrupts on that particular CPU along with the regular disabling of preemption on the
+executing CPU.
+
+The ISR can still just call `spin_lock()` instead of `spin_lock_irqsave()` because interrupts are
+disabled anyway during ISR on the executing CPU. Often times people use `spin_lock_irqsave()` in an
+ISR, that's not necessary.
 
 ## Lab 1 - Handling interrupts
 
@@ -98,12 +130,38 @@ sudo rmmod timer_deferred_work_driver
 
 ## Lab 2 - Handling interrupts and waiting for a condition
 
+
+This lab consists on:
+
+- Handling two types of interrupt: FALLING EDGE AND RISING EDGE
+- Processing read requests from user space and aleeping if there is not data to read yet
+- After pressing the switch, two interrupts will be generated and processed by the
+interrupt handler. The interrupt handler will wake up the user's process if there is any.
+- using a `wait_queue_head_t` to send the user's process to sleep when there is not
+data to be read.
+
+The files used for this lab are:
+
+- chapter-7/lab-2-interrupt-wait/handle_interrupt_wait_driver.c
+- chapter-7/lab-2-interrupt-wait/Makefile (builds the .ko file)
+- linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+
+>Note: Remember to build the device tree (DT) and install the modules.
+
 ```shell
 cd my_modules/
-sudo insmod handle_interrupt_wait_driver.ko 
+sudo insmod handle_interrupt_wait_driver.ko
+more /proc/interrupts
 sudo chmod 777 /dev/miscdevice_name_wait 
-cat /dev/miscdevice_name_wait 
+cat /dev/miscdevice_name_wait
+
+# Press the switch several times
+# and see how the type of interrupt appears in the screen.
+
+# Ctrl-c
+
+# Press the switch several times again
+cat /dev/miscdevice_name_wait
 sudo rmmod handle_interrupt_wait_driver 
 ```
-
 
