@@ -86,6 +86,12 @@
 		brcm,function = <0>;	/* Input */
 		brcm,pull = <1>; 		/* Pull down */
 	};
+
+	interrupt_pins: interrupt_pins {
+		brcm,pins = <23 24>;
+		brcm,function = <0>; /* Input*/
+		brcm,pull = <1 1>; /* Pull down */
+	};
 };
 
 &mmcnr {
@@ -208,6 +214,42 @@
 
 	timer_work_dts {
 		compatible = "timer_deferred_work_compatible";
+	};
+
+	led_blink_control {
+		compatible = "led_blink,control";
+		pinctrl-names = "default";
+		pinctrl-0 = <&interrupt_pins &led_pins>;
+
+		bp1 {
+			label = "MIKROBUS_KEY_1";
+			gpios = <&gpio 23 GPIO_ACTIVE_LOW>;
+			trigger = "falling";
+		};
+
+		bp2 {
+			label = "MIKROBUS_KEY_2";
+			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
+			trigger = "falling";
+		};
+
+		ledred {
+			label = "led";
+			colour = "red";
+			gpios = <&gpio 27 GPIO_ACTIVE_LOW>;
+		};
+
+		ledgreen {
+			label = "led";
+			colour = "green";
+			gpios = <&gpio 22 GPIO_ACTIVE_LOW>;
+		};
+
+		ledblue {
+			label = "led";
+			colour = "blue";
+			gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
+		};
 	};
 };
 

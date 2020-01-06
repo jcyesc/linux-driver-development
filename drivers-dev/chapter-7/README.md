@@ -165,3 +165,57 @@ cat /dev/miscdevice_name_wait
 sudo rmmod handle_interrupt_wait_driver 
 ```
 
+## Lab 3 - Led blink control driver
+
+This driver will create a new class called "keyled". Several led devices will
+be created under the "keyled" class, and also several sysfs entries will be created
+under each led device. We will control each led device by writing from user space
+to the sysfs entries under each led device registered to the `keyled` class. The
+led devices will be controlled writing to the sysfs entries under
+`/sys/class/keyled/<led_device>/` directory.
+ *
+The blinking value `period` of each led device will be incremented or decremented via
+interrupts by using two buttons. A kernel thread will manage the led blinking, toggling
+the output value of the GPIO connected to the led.
+
+The files used for this lab are:
+
+- chapter-7/lab-3-led-blink-control/led_blink_control_driver.c
+- chapter-7/lab-3-led-blink-control/Makefile (builds the .ko file)
+- linux-kernel/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+
+>Note: Remember to build the device tree (DT) and install the modules.
+
+```shell
+sudo insmod led_blink_control_driver.ko 
+more /proc/interrupts 
+ls /sys/class/keyled/
+cd /sys/class/keyled/blue
+ls
+echo on > set_led
+sudo chmod 777 *
+echo on > set_led
+cd /sys/class/keyled/red
+sudo chmod 777 *
+echo on > set_led 
+cd ../green/
+sudo chmod 777 *
+echo on > set_led 
+echo on > blink_on_led 
+cd ../red/
+echo on > blink_on_led 
+echo off > ../green/blink_off_led 
+echo on > blink_on_led 
+echo off > set_led 
+cd ../blue/
+ls
+echo on > blink_on_led
+
+# Click in the switches to increase or decrease the period.
+
+echo 100 > set_period 
+echo 900 > set_period 
+echo 90 > set_period 
+echo off > blink_off_led 
+sudo rmmod led_blink_control_driver 
+```
