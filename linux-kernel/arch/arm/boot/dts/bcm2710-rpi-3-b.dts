@@ -251,6 +251,10 @@
 			gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
 		};
 	};
+
+	dma_m2m {
+		compatible = "dma,dma_m2m";
+	};
 };
 
 &firmware {
